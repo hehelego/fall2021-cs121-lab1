@@ -1,12 +1,28 @@
 # exclude binary executables and object files
-bin/**
-obj/**
+bin/
+obj/
+
+# exclude the test cases
+data/*.txt
+data/original/
 
 
 ###### source:
 ###### https://github.com/github/gitignore
 ###### which is under CC0-1.0 license
 
+# cmake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
 
 # Prerequisites
 *.d
