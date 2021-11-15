@@ -184,3 +184,34 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 ```
+
+```plaintext
+valgrind --version
+
+valgrind-3.17.0
+
+
+pacman -Qi valgrind
+
+Name            : valgrind
+Version         : 3.17.0-1
+Description     : Tool to help find memory-management problems in programs
+Architecture    : x86_64
+URL             : http://valgrind.org/
+Licenses        : GPL
+Groups          : None
+Provides        : valgrind-multilib
+Depends On      : glibc  perl
+Optional Deps   : lib32-glibc: 32-bit ABI support
+Required By     : None
+Optional For    : qtcreator
+Conflicts With  : None
+Replaces        : valgrind-multilib
+Installed Size  : 274.88 MiB
+Packager        : Allan McRae <allan@archlinux.org>
+Build Date      : Thu 20 May 2021 03:14:41 PM CST
+Install Date    : Sun 30 May 2021 07:44:19 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+```
