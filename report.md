@@ -153,3 +153,34 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 ```
+
+```plaintext
+cmake --version
+
+cmake version 3.21.4
+
+
+pacman -Qi cmake
+
+Name            : cmake
+Version         : 3.21.4-1
+Description     : A cross-platform open-source make system
+Architecture    : x86_64
+URL             : https://www.cmake.org/
+Licenses        : custom
+Groups          : None
+Provides        : None
+Depends On      : curl  libarchive  hicolor-icon-theme  jsoncpp  libjsoncpp.so=24-64  libuv  rhash
+Optional Deps   : qt6-base: cmake-gui [installed]
+Required By     : None
+Optional For    : qtcreator
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 49.66 MiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Thu 28 Oct 2021 01:53:07 AM CST
+Install Date    : Thu 28 Oct 2021 11:50:36 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+```
