@@ -6,7 +6,7 @@
 #include "matrix.hpp"
 #include "common.hpp"
 
-int main() {
+i32 main() {
 #pragma omp parallel num_threads(16)
   {
 #pragma omp master

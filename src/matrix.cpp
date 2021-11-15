@@ -1,2 +1,2 @@
 #include "matrix.hpp"
-namespace SparseMatrix {}
+namespace sparse_matrix {}

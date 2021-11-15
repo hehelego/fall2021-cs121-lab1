@@ -1,4 +1,7 @@
+#pragma once // include guard
+
 #include <cassert>
+#include <cctype>
 #include <cstdint>
 
 // the rust-style type alias
@@ -17,42 +20,30 @@ using f64 = double;
 // string types
 using Cstr = const char *;
 
-template <typename T> struct FixedArray {
-  u32 sz;
-  T *data;
-  ~FixedArray() { delete[] data; }
-  FixedArray(u32 n) {
-    data = new T[sz = n];
-    assert(data != nullptr);
-  }
-  FixedArray(const FixedArray &rhs) {
-    sz = rhs.sz;
-    data = new T[sz = rhs.sz];
-    assert(data != nullptr);
-    for (u32 i = 0; i < sz; i++) {
-      data[i] = rhs.data[i];
-    }
-  }
-  inline void operator=(const FixedArray &rhs) {
-    sz = rhs.sz;
-    data = new T[sz = rhs.sz];
-    assert(data != nullptr);
-    for (u32 i = 0; i < sz; i++) {
-      data[i] = rhs.data[i];
-    }
-  }
+template <typename Integer> Integer parse_int(Cstr source, u32 start = 0) {
+  Integer x = 0, sgn = 1;
 
-  inline u32 size() const { return sz; }
-  inline T &operator[](u32 i) { return data[i]; }
-  inline const T &operator[](u32 i) const { return data[i]; }
-};
-template <typename T> struct FixedQueue {
-  u32 l, r;
-  FixedArray<T> data;
-  FixedQueue(int n) : data(n) { l = 0, r = 0; }
-  inline u32 size() const { return r - l; }
+  Cstr p = source + start;
+  while (*p != '\0' && !isdigit(*p)) {
+    if (*p == '-') {
+      sgn = -1;
+    }
+    p++;
+  }
+  while (*p != '\0' && isdigit(*p)) {
+    x = x * 10 + *(p++) - '0';
+  }
+  return x * sgn;
+}
+template <typename Integer> Integer parse_uint(Cstr source, u32 start = 0) {
+  Integer x = 0;
 
-  void push(const T &x) { data[r++] = x; }
-  void pop() { l++; }
-  const T &get() const { return data[l]; }
-};
+  Cstr p = source + start;
+  while (*p != '\0' && !isdigit(*p)) {
+    p++;
+  }
+  while (*p != '\0' && isdigit(*p)) {
+    x = x * 10 + *(p++) - '0';
+  }
+  return x;
+}
