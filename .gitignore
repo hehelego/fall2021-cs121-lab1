@@ -3,8 +3,9 @@ bin/
 obj/
 
 # exclude the test cases
-data/*.txt
 data/*.txt.gz
+data/*.txt
+data/*.mm
 
 
 ###### source:
