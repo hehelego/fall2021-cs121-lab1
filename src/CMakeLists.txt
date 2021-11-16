@@ -6,10 +6,23 @@ add_compile_options(
 	)
 
 
-add_executable(serial serial-bfs.cpp)
+# libraries
+# add_library(adjmat adjmat.cpp)
+# add_library(ds data_structure.cpp)
+# add_library(com common.cpp)
+# link_libraries(adjmat ds com)
+
+# to use inline functions, we have to get rid of static/dynamic linking
+# https://stackoverflow.com/questions/53114164/inlining-class-methods-inside-a-static-library
+set(lib adjmat.cpp adjmat.hpp data_structure.cpp data_structure.hpp common.cpp common.hpp)
 
 
-add_executable(parallel parallel-bfs.cpp)
+# executables
+add_executable(serial serial-bfs.cpp ${lib})
+add_executable(parallel parallel-bfs.cpp ${lib})
+add_executable(io io_only.cpp ${lib})
+
+# add OpenMP for parallel-bfs executable
 find_library(omp libomp)
 target_compile_options(parallel PRIVATE -fopenmp)
 target_link_libraries(parallel omp)

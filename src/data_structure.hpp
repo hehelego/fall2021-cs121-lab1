@@ -1,39 +1,14 @@
 #pragma once // include guard
 #include "common.hpp"
 
-template <typename T> struct FixedArray {
-  u32 sz;
+template <typename T> struct Queue {
+  u32 l, r, n;
   T *data;
-  ~FixedArray() { delete[] data; }
-  FixedArray(u32 n) {
-    data = new T[sz = n];
-    assert(data != nullptr);
+  Queue(u32 cap) {
+    l = 0, r = 0;
+    data = new T[n = cap];
   }
-  FixedArray(const FixedArray &rhs) {
-    sz = rhs.sz;
-    data = new T[sz = rhs.sz];
-    assert(data != nullptr);
-    for (u32 i = 0; i < sz; i++) {
-      data[i] = rhs.data[i];
-    }
-  }
-  inline void operator=(const FixedArray &rhs) {
-    sz = rhs.sz;
-    data = new T[sz = rhs.sz];
-    assert(data != nullptr);
-    for (u32 i = 0; i < sz; i++) {
-      data[i] = rhs.data[i];
-    }
-  }
-
-  inline u32 size() const { return sz; }
-  inline T &operator[](u32 i) { return data[i]; }
-  inline const T &operator[](u32 i) const { return data[i]; }
-};
-template <typename T> struct FixedQueue {
-  u32 l, r;
-  FixedArray<T> data;
-  FixedQueue(int n) : data(n) { l = 0, r = 0; }
+  ~Queue() { delete[] data; }
   inline u32 size() const { return r - l; }
 
   inline void push(const T &x) { data[r++] = x; }

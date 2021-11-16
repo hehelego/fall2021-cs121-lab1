@@ -19,31 +19,3 @@ using f32 = float;
 using f64 = double;
 // string types
 using Cstr = const char *;
-
-template <typename Integer> Integer parse_int(Cstr source, u32 start = 0) {
-  Integer x = 0, sgn = 1;
-
-  Cstr p = source + start;
-  while (*p != '\0' && !isdigit(*p)) {
-    if (*p == '-') {
-      sgn = -1;
-    }
-    p++;
-  }
-  while (*p != '\0' && isdigit(*p)) {
-    x = x * 10 + *(p++) - '0';
-  }
-  return x * sgn;
-}
-template <typename Integer> Integer parse_uint(Cstr source, u32 start = 0) {
-  Integer x = 0;
-
-  Cstr p = source + start;
-  while (*p != '\0' && !isdigit(*p)) {
-    p++;
-  }
-  while (*p != '\0' && isdigit(*p)) {
-    x = x * 10 + *(p++) - '0';
-  }
-  return x;
-}
