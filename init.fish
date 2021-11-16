@@ -5,7 +5,7 @@
 echo '=== fetch datasets ==='
 cd data/
 ./download-data.fish
-./edges_to_csr.py
+./edges_to_mm.py
 cd ../
 
 echo '=== build ==='
