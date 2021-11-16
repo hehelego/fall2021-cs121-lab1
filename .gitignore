@@ -4,7 +4,7 @@ obj/
 
 # exclude the test cases
 data/*.txt
-data/original/
+data/*.txt.gz
 
 
 ###### source:
