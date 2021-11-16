@@ -8,6 +8,13 @@
 
 ## Appendix
 
+### encountered problems
+
+#### using inline member function from a static library
+
+According to [stackoverflow: inlining function inside a static library](https://stackoverflow.com/questions/53114164/inlining-class-methods-inside-a-static-library),
+we have to get rid of static/dynamic linking.
+
 ### HW/SW Enviornment
 
 The benchmark was done on my laptop.  
@@ -94,124 +101,13 @@ hwinfo --memory
   Config Status: cfg=new, avail=yes, need=no, active=unknown
 ```
 
-```plaintext
-gcc --version
+### softwares dependices
 
-gcc (GCC) 11.1.0
-Copyright (C) 2021 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-
-pacman -Qi gcc
-
-Name            : gcc
-Version         : 11.1.0-1
-Description     : The GNU Compiler Collection - C and C++ frontends
-Architecture    : x86_64
-URL             : https://gcc.gnu.org
-Licenses        : GPL  LGPL  FDL  custom
-Groups          : base-devel
-Provides        : gcc-multilib
-Depends On      : gcc-libs=11.1.0-1  binutils>=2.28  libmpc
-Optional Deps   : lib32-gcc-libs: for generating code for 32-bit ABI
-Required By     : clang  dkms  ghc
-Optional For    : xorg-xrdb
-Conflicts With  : None
-Replaces        : gcc-multilib
-Installed Size  : 151.27 MiB
-Packager        : Giancarlo Razzolini <grazzolini@archlinux.org>
-Build Date      : Thu 13 May 2021 10:02:30 PM CST
-Install Date    : Mon 17 May 2021 10:11:15 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-```
-
-```plaintext
-pacman -Qi openmp
-
-Name            : openmp
-Version         : 13.0.0-1
-Description     : LLVM OpenMP Runtime Library
-Architecture    : x86_64
-URL             : https://openmp.llvm.org/
-Licenses        : custom:Apache 2.0 with LLVM Exception
-Groups          : None
-Provides        : None
-Depends On      : glibc  libelf  libffi
-Optional Deps   : None
-Required By     : None
-Optional For    : clang
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 23.40 MiB
-Packager        : Evangelos Foutras <foutrelis@archlinux.org>
-Build Date      : Sun 24 Oct 2021 02:56:37 AM CST
-Install Date    : Sat 13 Nov 2021 09:32:10 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-```
-
-```plaintext
-cmake --version
-
-cmake version 3.21.4
-
-
-pacman -Qi cmake
-
-Name            : cmake
-Version         : 3.21.4-1
-Description     : A cross-platform open-source make system
-Architecture    : x86_64
-URL             : https://www.cmake.org/
-Licenses        : custom
-Groups          : None
-Provides        : None
-Depends On      : curl  libarchive  hicolor-icon-theme  jsoncpp  libjsoncpp.so=24-64  libuv  rhash
-Optional Deps   : qt6-base: cmake-gui [installed]
-Required By     : None
-Optional For    : qtcreator
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 49.66 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Thu 28 Oct 2021 01:53:07 AM CST
-Install Date    : Thu 28 Oct 2021 11:50:36 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-```
-
-```plaintext
-valgrind --version
-
-valgrind-3.17.0
-
-
-pacman -Qi valgrind
-
-Name            : valgrind
-Version         : 3.17.0-1
-Description     : Tool to help find memory-management problems in programs
-Architecture    : x86_64
-URL             : http://valgrind.org/
-Licenses        : GPL
-Groups          : None
-Provides        : valgrind-multilib
-Depends On      : glibc  perl
-Optional Deps   : lib32-glibc: 32-bit ABI support
-Required By     : None
-Optional For    : qtcreator
-Conflicts With  : None
-Replaces        : valgrind-multilib
-Installed Size  : 274.88 MiB
-Packager        : Allan McRae <allan@archlinux.org>
-Build Date      : Thu 20 May 2021 03:14:41 PM CST
-Install Date    : Sun 30 May 2021 07:44:19 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-```
+- `fish` 3.3.1
+- `python` 3.9.7
+- `aria2` 1.36.0
+- `gcc` 11.1.0
+- `openmp` 13.0.0-1
+- `cmake` 3.21.4
+- `valgrind` 3.17.0
+- `hyperfine` 1.12.0
