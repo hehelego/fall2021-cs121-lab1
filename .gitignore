@@ -7,6 +7,9 @@ data/*.txt.gz
 data/*.txt
 data/*.mm
 
+# exclude PaRMAT git repository
+data/PaRMAT
+
 
 ###### source:
 ###### https://github.com/github/gitignore
