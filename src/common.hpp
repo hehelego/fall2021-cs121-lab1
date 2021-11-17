@@ -20,10 +20,15 @@ using f64 = double;
 // string types
 using Cstr = const char *;
 
+// one row in the final BFS output
+struct output_row {
+  u32 node, distance, parent;
+};
+
 // debug log
 struct debug {
   std::ostream &os;
-  debug(std::ostream &os=std::cerr) : os(os) {}
+  debug(std::ostream &os = std::cerr) : os(os) {}
 
 #ifdef DEBUG
   template <typename T> inline debug &operator<<(const T &t) {

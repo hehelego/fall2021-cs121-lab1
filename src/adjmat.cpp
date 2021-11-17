@@ -2,19 +2,8 @@
 #include <cstdio>
 #include <cstring>
 
-adjacent_matrix::adjacent_matrix(u32 vertices, u32 edges) {
-  n = vertices, m = edges;
-  row_start = new u32[n + 1], row_cnt = new u32[n + 1], data = new u32[m];
-  assert(row_start != nullptr), assert(row_cnt != nullptr), assert(data != nullptr);
-}
-adjacent_matrix::adjacent_matrix(const adjacent_matrix &matrix) {
-  n = matrix.n, m = matrix.m;
-  row_start = new u32[n + 1], row_cnt = new u32[n + 1], data = new u32[m];
-  assert(row_start != nullptr), assert(row_cnt != nullptr), assert(data != nullptr);
-  for (u32 i = 0; i <= n; i++) { row_start[i] = matrix.row_start[i], row_cnt[i] = matrix.row_cnt[i]; }
-  for (u32 i = 0; i < m; i++) { data[i] = matrix.data[i]; }
-}
-adjacent_matrix::~adjacent_matrix() { delete[] row_start, delete[] data; }
+adjacent_matrix::adjacent_matrix(u32 vertices, u32 edges, bool undirected)
+    : n(vertices), m(edges), sym(undirected), row_start(n+1, 0), row_cnt(n+1, 0), data(m, 0) {}
 
 adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   FILE *f = fopen(file_path, "r");
@@ -39,7 +28,7 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
           << '\t' << "edges=" << edges << '\n';
 
   // read matrix elements
-  adjacent_matrix matrix(n, edges);
+  adjacent_matrix matrix(n, edges, sym);
   struct pair {
     u32 x, y;
   } *pairs = new pair[l];
@@ -50,9 +39,8 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
     matrix.row_cnt[x]++;
     if (sym && x != y) { matrix.row_cnt[y]++; }
   }
-  matrix.row_start[0] = 0;
   for (u32 i = 0; i < n; i++) { matrix.row_start[i + 1] = matrix.row_start[i] + matrix.row_cnt[i]; }
-  for (u32 i = 0; i <= n; i++) { matrix.row_cnt[i] = 0; }
+  matrix.row_cnt.set_all(0);
   for (u32 i = 0, x, y; i < l; i++) {
     x = pairs[i].x, y = pairs[i].y;
     matrix.adj(x)[matrix.row_cnt[x]++] = y;
