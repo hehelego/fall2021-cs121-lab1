@@ -8,7 +8,5 @@ i32 main(i32 argc, Cstr *argv) {
   u32 source = 0;
   sscanf(argv[2], "%u", &source);
 
-
-
   return 0;
 }

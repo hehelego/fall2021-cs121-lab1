@@ -13,3 +13,7 @@ set files (ls | rg '.gz$')
 for f in $files
 	gzip --keep --decompress $f
 end
+
+# convert the edgeslist files into matrix market coordinate format
+set files (ls | rg '.txt$')
+./edges_to_mm.py $files

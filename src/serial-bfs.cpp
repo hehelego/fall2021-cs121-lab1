@@ -5,6 +5,7 @@
 
 #include "adjmat.hpp"
 #include "common.hpp"
+#include "data_structure.hpp"
 
 i32 main(i32 argc, Cstr *argv) {
   assert(argc == 3);

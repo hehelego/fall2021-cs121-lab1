@@ -1,5 +1,6 @@
 #!/usr/bin/python
-import os
+import sys
+
 import networkx as nx
 import scipy
 import scipy.io
@@ -13,7 +14,7 @@ def convert_one(src_path: str, dst_path: str) -> None:
 
 
 if __name__ == '__main__':
-    market_files = [f for f in os.listdir() if f.endswith('.txt')]
+    market_files = sys.argv[1:]
     for i in market_files:
         print(f'[edges to matrix market] converting {i}')
         convert_one(i, i+'.mm')

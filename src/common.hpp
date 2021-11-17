@@ -1,8 +1,8 @@
 #pragma once // include guard
 
 #include <cassert>
-#include <cctype>
 #include <cstdint>
+#include <iostream>
 
 // the rust-style type alias
 //
@@ -19,3 +19,18 @@ using f32 = float;
 using f64 = double;
 // string types
 using Cstr = const char *;
+
+// debug log
+struct debug {
+  std::ostream &os;
+  debug(std::ostream &os=std::cerr) : os(os) {}
+
+#ifdef DEBUG
+  template <typename T> inline debug &operator<<(const T &t) {
+    os << t;
+    return *this;
+  }
+#else
+  template <typename T> inline debug &operator<<(const T &) { return *this; }
+#endif
+};
