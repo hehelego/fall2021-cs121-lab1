@@ -4,11 +4,11 @@
 
 set files                                           # matrix-market testcase files
 set rounds "20"                                     # run $rounds times on each testcase
-set rounds "2"                                     # run $rounds times on each testcase
 set source                                          # randomly selected source for BFS tree
 set output_serial   "/tmp/benchmark_serial"         # the file to store the benchmark result of serial-bfs
 set output_parallel "/tmp/benchmark_parallel"       # the file to store the benchmark result of parallel-bfs
 
+ulimit -s unlimited
 
 
 echo '=== fetch datasets ==='

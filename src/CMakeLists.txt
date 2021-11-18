@@ -46,6 +46,7 @@ endif()
 ### SECTION executables ###
 
 add_executable(test test.cpp ${inline_lib})
+add_executable(snap_to_mm snap_to_mm.cpp ${inline_lib})
 add_executable(serial serial-bfs.cpp ${inline_lib})
 add_executable(parallel parallel-bfs.cpp ${inline_lib})
 

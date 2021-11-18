@@ -19,4 +19,6 @@ end
 
 # convert the edgeslist files into matrix market coordinate format
 set files (ls | grep '.txt$')
-./edges_to_mm.py $files
+for f in $files
+	../bin/snap_to_mm <$f >$f.mm
+end
