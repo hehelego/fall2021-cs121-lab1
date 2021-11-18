@@ -9,7 +9,7 @@ aria2c -j6 https://snap.stanford.edu/data/soc-LiveJournal1.txt.gz
 aria2c -j6 https://snap.stanford.edu/data/web-Stanford.txt.gz
 
 # decompress
-set files (ls | rg '.gz$')
+set files (ls | grep '.gz$')
 for f in $files
 	gzip --keep --decompress $f
 end
@@ -18,5 +18,5 @@ end
 ./gen-RMAT.fish
 
 # convert the edgeslist files into matrix market coordinate format
-set files (ls | rg '.txt$')
+set files (ls | grep '.txt$')
 ./edges_to_mm.py $files

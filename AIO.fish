@@ -14,7 +14,7 @@ set output_parallel "/tmp/benchmark_parallel"       # the file to store the benc
 echo '=== fetch datasets ==='
 cd data/
 ./prepare_data.fish
-set files (ls | rg '.mm$')
+set files (ls | grep '.mm$')
 cd ../
 
 

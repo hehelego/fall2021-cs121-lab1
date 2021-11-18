@@ -110,4 +110,3 @@ hwinfo --memory
 - `openmp` 13.0.0-1
 - `cmake` 3.21.4
 - `valgrind` 3.17.0
-- `hyperfine` 1.12.0
