@@ -1,6 +1,7 @@
 ### SECTION compiling&linking options ###
 
 option(NUM_THREADS "number of spawned thread for OpenMP" 8)
+option(BUILD_TYPE "build type, release or debug" release)
 
 add_compile_definitions(NUM_THREADS=${NUM_THREADS})
 
@@ -12,7 +13,7 @@ add_compile_options(
 	-Wextra
 )
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+if(${BUILD_TYPE} STREQUAL "debug")
 	add_compile_definitions(DEBUG)
 	add_compile_options(
 		-g
@@ -54,6 +55,6 @@ add_executable(serial serial-bfs.cpp ${inline_lib})
 add_executable(parallel parallel-bfs.cpp ${inline_lib})
 
 # add OpenMP for parallel-bfs executable
-find_library(omp libomp)
+find_package(OpenMP)
 target_compile_options(parallel PRIVATE -fopenmp)
-target_link_libraries(parallel omp)
+target_link_options(parallel PRIVATE -fopenmp)

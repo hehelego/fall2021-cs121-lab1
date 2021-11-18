@@ -8,12 +8,23 @@
 
 ## Appendix
 
+### reference
+
+- [AAAI Workshop 2006: Understanding parallelism in graph traversal on multi-core clusters](https://www.aaai.org/Papers/Workshops/2006/WS-06-08/WS06-08-007.pdf)
+- [FUTURE COMPUTING 2014: Level-Synchronous Parallel Breadth-First Search Algorithms For Multicore and Multiprocessor Systems](https://web.archive.org/web/20190329160129if_/https://pdfs.semanticscholar.org/cde0/420a117f8643d066cdcd60c95d5ca39a1082.pdf)
+
 ### encountered problems
 
 #### using inline member function from a static library
 
 According to [stackoverflow: inlining function inside a static library](https://stackoverflow.com/questions/53114164/inlining-class-methods-inside-a-static-library),
 we have to get rid of static/dynamic linking.
+
+#### edgelist to matrix market converter, the last line is duplicated
+
+I added some `printf` debug info and found that the last line is read twice.  
+Fortunately, this is a frequent asked question, I found the soulution on
+[stackoverflow: fgets repeats the last line](https://stackoverflow.com/questions/1642789/fgets-in-c-repeats-last-line).
 
 ### HW/SW Enviornment
 
