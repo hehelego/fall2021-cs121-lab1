@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 
 // the rust-style type alias
@@ -39,3 +40,11 @@ struct debug {
   template <typename T> inline debug &operator<<(const T &) { return *this; }
 #endif
 };
+
+#define REQUIRE(cond)                                                                                        \
+  do {                                                                                                       \
+    if (!(cond)) {                                                                                           \
+      fprintf(stderr, "[REQ_FAILURE](%s:%d) %s", __FILE__, __LINE__, #cond);                                 \
+      std::abort();                                                                                          \
+    }                                                                                                        \
+  } while (0)
