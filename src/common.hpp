@@ -21,9 +21,14 @@ using f64 = double;
 // string types
 using Cstr = const char *;
 
-// one row in the final BFS output
-struct output_row {
-  u32 node, distance, parent;
+template <typename U, typename V> struct tuple2 {
+  U x;
+  V y;
+};
+template <typename U, typename V, typename W> struct tuple3 {
+  U x;
+  V y;
+  W z;
 };
 
 // debug log
