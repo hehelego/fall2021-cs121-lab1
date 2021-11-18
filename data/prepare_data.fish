@@ -14,6 +14,9 @@ for f in $files
 	gzip --keep --decompress $f
 end
 
+# generate RMAT graphs
+./gen-RMAT.fish
+
 # convert the edgeslist files into matrix market coordinate format
 set files (ls | rg '.txt$')
 ./edges_to_mm.py $files

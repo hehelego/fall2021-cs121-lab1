@@ -13,8 +13,7 @@ set output_parallel "/tmp/benchmark_parallel"       # the file to store the benc
 
 echo '=== fetch datasets ==='
 cd data/
-# ./download-data.fish
-./edges_to_mm.py
+./prepare_data.fish
 set files (ls | rg '.mm$')
 cd ../
 
