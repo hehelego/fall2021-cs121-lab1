@@ -36,14 +36,14 @@ struct debug {
   std::ostream &os;
   debug(std::ostream &os = std::cerr) : os(os) {}
 
-#ifdef DEBUG
   template <typename T> inline debug &operator<<(const T &t) {
+#ifdef DEBUG
     os << t;
+#else
+    (void)t;
+#endif
     return *this;
   }
-#else
-  template <typename T> inline debug &operator<<(const T &) { return *this; }
-#endif
 };
 
 #define REQUIRE(cond)                                                                                        \

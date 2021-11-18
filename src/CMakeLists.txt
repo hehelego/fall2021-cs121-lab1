@@ -1,5 +1,9 @@
 ### SECTION compiling&linking options ###
 
+option(NUM_THREADS "number of spawned thread for OpenMP" 8)
+
+add_compile_definitions(NUM_THREADS=${NUM_THREADS})
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -7,7 +11,6 @@ add_compile_options(
 	-Wall
 	-Wextra
 )
-
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 	add_compile_definitions(DEBUG)

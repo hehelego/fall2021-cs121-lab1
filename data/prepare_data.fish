@@ -20,5 +20,5 @@ end
 # convert the edgeslist files into matrix market coordinate format
 set files (ls | grep '.txt$')
 for f in $files
-	../bin/snap_to_mm <$f >$f.mm
+	../bin/snap_to_mm $f $f.mm
 end

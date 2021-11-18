@@ -10,19 +10,17 @@ set output_parallel "/tmp/benchmark_parallel"       # the file to store the benc
 
 ulimit -s unlimited
 
+echo '=== build ==='
+cmake -D CMAKE_BUILD_TYPE=Release -D INLINE_LIBRARY=ON .
+make clean
+make
+
 
 echo '=== fetch datasets ==='
 cd data/
 ./prepare_data.fish
 set files (ls | grep '.mm$')
 cd ../
-
-
-
-echo '=== build ==='
-cmake -D CMAKE_BUILD_TYPE=Release -D INLINE_LIBRARY=ON .
-make
-
 
 
 echo '=== benchmark ==='

@@ -13,6 +13,7 @@ i32 main(i32 argc, Cstr *argv) {
   u32 source = 0;
   sscanf(argv[2], "%u", &source);
   auto V = matrix.vertices(), E = matrix.edges();
+  (void)E;
 
   // timing start
   using std::chrono::high_resolution_clock, std::chrono::duration_cast, std::chrono::duration;
