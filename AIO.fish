@@ -11,8 +11,7 @@ set output_parallel "/tmp/benchmark_parallel"       # the file to store the benc
 ulimit -s unlimited
 
 echo '=== build ==='
-cmake -D CMAKE_BUILD_TYPE=Release -D INLINE_LIBRARY=ON .
-make clean
+cmake -D BUILD_TYPE=release -D NUM_THREADS=16 .
 make
 
 

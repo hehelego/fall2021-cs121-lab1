@@ -22,24 +22,22 @@ i32 main(i32 argc, Cstr *argv) {
   // bfs
   using tup2 = tuple2<u32, u32>;
 
-  queue<tup2> q{V};
+  array<tup2> q{V};
+  u32 ql = 0, qr = 0;
   array<tup2> bfs_tree{V + 1};
   u32 edges_in_block = 0, nodes_in_block = 0;
 
   bfs_tree.set_all(tup2{V + 1, V + 1});
-  bfs_tree[source] = tup2{source, 0}, q.push(tup2{source, 0});
+  bfs_tree[source] = tup2{source, 0}, q[qr++] = tup2{source, 0};
 
-  while (q.size() > 0) {
-    auto row = q.get();
-    q.pop();
-
-    auto [u, dis] = row;
-    dis++;
+  while (ql < qr) {
+    auto [u, dis] = q[ql++];
     auto adj = matrix.adj(u);
     edges_in_block += adj.size(), nodes_in_block++;
+    dis++;
     for (u32 i = 0, v; i < adj.size(); i++) {
       v = adj[i];
-      if (bfs_tree[v].y > V) { bfs_tree[v] = tup2{u, dis}, q.push(tup2{v, dis}); }
+      if (bfs_tree[v].y > V) { bfs_tree[v] = tup2{u, dis}, q[qr++] = tup2{v, dis}; }
     }
   }
   edges_in_block /= 2;
@@ -52,11 +50,11 @@ i32 main(i32 argc, Cstr *argv) {
 
   // output
   printf("%u %u\n", nodes_in_block, edges_in_block);
-  for (u32 i = 0; i < V; i++) {
+  for (u32 i = 1; i <= V; i++) {
     auto [p, d] = bfs_tree[i];
     if (d > V) { continue; }
-    printf("%u %u %u\n", i, d, p);
-    // printf("%u %u\n", u, d);
+    // printf("%u %u %u\n", i, d, p);
+    printf("%u %u\n", i, d);
     // uncomment this line and compare the output with networkx-bfs output to verify correctness.
   }
 

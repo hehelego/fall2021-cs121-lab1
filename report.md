@@ -10,15 +10,12 @@
 
 ### reference
 
+- [wikipedia: parallel breadth first search](https://en.wikipedia.org/wiki/Parallel_breadth-first_search)
 - [AAAI Workshop 2006: Understanding parallelism in graph traversal on multi-core clusters](https://www.aaai.org/Papers/Workshops/2006/WS-06-08/WS06-08-007.pdf)
 - [FUTURE COMPUTING 2014: Level-Synchronous Parallel Breadth-First Search Algorithms For Multicore and Multiprocessor Systems](https://web.archive.org/web/20190329160129if_/https://pdfs.semanticscholar.org/cde0/420a117f8643d066cdcd60c95d5ca39a1082.pdf)
+- [cmu 15-418 spring2017 assignment 3](http://15418.courses.cs.cmu.edu/spring2017/article/7)
 
 ### encountered problems
-
-#### using inline member function from a static library
-
-According to [stackoverflow: inlining function inside a static library](https://stackoverflow.com/questions/53114164/inlining-class-methods-inside-a-static-library),
-we have to get rid of static/dynamic linking.
 
 #### edgelist to matrix market converter, the last line is duplicated
 

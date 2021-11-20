@@ -21,6 +21,12 @@ using f64 = double;
 // string types
 using Cstr = const char *;
 
+#ifdef NUM_THREADS
+const u32 OMP_THREADS = NUM_THREADS;
+#else
+const u32 OMP_THREADS = 8;
+#endif
+
 template <typename U, typename V> struct tuple2 {
   U x;
   V y;

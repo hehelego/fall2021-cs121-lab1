@@ -1,12 +1,10 @@
 #include "adjmat.hpp"
-#include <cstdio>
 
 adjacent_matrix::adjacent_matrix(u32 vertices, u32 edges)
     : n(vertices), m(edges), row_start(n + 1, 0), row_cnt(n + 1, 0), data(m * 2, 0) {}
 
 adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   FILE *f = fopen(file_path, "r");
-  assert(f != nullptr);
   char line[512];
 
   // header line
@@ -18,7 +16,7 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   // matrix shape line
   u32 n, m, l;
   sscanf(line, "%u%u%u", &n, &m, &l);
-  assert(n == m);
+  REQUIRE(n == m);
   debug() << "parse_matrix_market:" << '\n'
           << '\t' << "vertices=" << n << '\n'
           << '\t' << "edges=" << l << '\n';
@@ -42,6 +40,7 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
     matrix.adj(x)[matrix.row_cnt[x]++] = y;
     if (x != y) { matrix.adj(y)[matrix.row_cnt[y]++] = x; }
   }
+  for (u32 i = 1; i <= n; i++) REQUIRE(matrix.row_cnt[i] <= n);
 
   delete[] pairs;
   fclose(f);

@@ -22,35 +22,52 @@ i32 main(i32 argc, Cstr *argv) {
 
   // bfs
   using tup2 = tuple2<u32, u32>;
+  omp_set_num_threads(OMP_THREADS);
 
-  queue<tup2> q{V};
-  array<tup2> bfs_tree{2 * E};
-  bitset<> vis{V + 1};
-  u32 edges_in_block = 0, nodes_in_block = 0;
+  array<u32> q{V};
+  u32 ptr = 0;
+  tuple2<array<tup2>, u32> sub[OMP_THREADS];
+  for (u32 i = 0; i < OMP_THREADS; i++) sub[i].x.init(V), sub[i].y = 0;
+  array<tup2> bfs_tree{V + 1};
+  u32 edges_in_block = matrix.adj(source).size(), nodes_in_block = 1;
 
+  u32 level = 0;
   bfs_tree.set_all(tup2{V + 1, V + 1});
-  bfs_tree[source] = tup2{source, 0}, q.push(tup2{source, 0});
+  bfs_tree[source] = tup2{source, level};
+  q[ptr++] = source;
 
-  while (q.size() > 0) {
-    auto row = q.get();
-    q.pop();
-    auto [u, dis] = row;
-    if (vis.get(u)) { continue; }
-    vis.set(u);
-
-    dis++;
-    auto adj = matrix.adj(u);
-    edges_in_block += adj.size(), nodes_in_block++;
-#pragma omp parallel for
-    for (u32 i = 0; i < adj.size(); i++) {
-      auto v = adj[i];
-      if (bfs_tree[v].y > V) {
-        bfs_tree[v] = tup2{u, dis};
-#pragma omp critical
-        { q.push(tup2{v, dis}); }
+  while (ptr > 0) {
+    level++;
+#pragma omp parallel for schedule(static)
+    for (u32 i = 0; i < ptr; i++) {
+      auto &[sub_q, sub_ptr] = sub[omp_get_thread_num()];
+      auto u = q[i];
+      auto adj = matrix.adj(u);
+      for (u32 j = 0, v = 0; j < adj.size(); j++) {
+        v = adj[j];
+        if (bfs_tree[v].x > V) {
+          assert(sub_ptr < sub_q.size());
+          sub_q[sub_ptr++] = tup2{v, u};
+        }
       }
     }
+
+    ptr = 0;
+    for (u32 i = 0; i < OMP_THREADS; i++) {
+      auto &[sub_q, sub_ptr] = sub[i];
+      for (u32 j = 0; j < sub_ptr; j++) {
+        auto [v, p] = sub_q[j];
+        if (bfs_tree[v].x > V) {
+          bfs_tree[v] = tup2{p, level};
+          q[ptr++] = v;
+          edges_in_block += matrix.adj(v).size();
+          nodes_in_block++;
+        }
+      }
+      sub_ptr = 0;
+    }
   }
+
   edges_in_block /= 2;
 
   // timing end
@@ -61,11 +78,11 @@ i32 main(i32 argc, Cstr *argv) {
 
   // output
   printf("%u %u\n", nodes_in_block, edges_in_block);
-  for (u32 i = 0; i < V; i++) {
+  for (u32 i = 1; i <= V; i++) {
     auto [p, d] = bfs_tree[i];
     if (d > V) { continue; }
-    printf("%u %u %u\n", i, d, p);
-    // printf("%u %u\n", u, d);
+    // printf("%u %u %u\n", i, d, p);
+    printf("%u %u\n", i, d);
     // uncomment this line and compare the output with networkx-bfs output to verify correctness.
   }
 

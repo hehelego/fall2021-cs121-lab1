@@ -2,6 +2,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cstring>
+#include <new>
 #include <sys/stat.h>
 #include <utility>
 #include <vector>
@@ -13,7 +14,7 @@ const u32 MAXN_EDGES = u32(1e9) + 10;
 pu32 parse_pair(const char *p) {
   u32 x = 0, y = 0;
   while (isdigit(*p)) { x = x * 10 + *(p++) - '0'; }
-  p++;
+  while (!isdigit(*p)) p++;
   while (isdigit(*p)) { y = y * 10 + *(p++) - '0'; }
   return std::make_pair(x, y);
 }
@@ -33,12 +34,12 @@ int main(int argc, char **argv) {
   u32 n = 0, m = 0;
   auto line = new char[LINE_LEN];
   auto edges = (std::pair<u32, u32> *)::operator new(sizeof(pu32) * MAXN_EDGES);
-  while (fgets(line, sizeof(line), fin)) {
+  while (fgets(line, LINE_LEN, fin)) {
     if (!isdigit(line[0])) continue;
     auto [x, y] = parse_pair(line);
     x++, y++;
-    n = std::max(n, x), n = std::max(n, y);
     edges[m++] = std::make_pair(x, y);
+    n = std::max(n, x), n = std::max(n, y);
   }
 
   fprintf(fout, "%%%%MatrixMarket matrix coordinate real symmetric\n%u %u %u\n", n, n, m);
@@ -48,6 +49,9 @@ int main(int argc, char **argv) {
   }
 
   fclose(fin), fclose(fout);
+  delete[] line;
+  ::operator delete(edges);
+  delete[] in_buf, delete[] out_buf;
 
   return 0;
 }

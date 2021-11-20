@@ -2,7 +2,6 @@
 import sys
 import random
 
-import networkx as nx
 import scipy
 import scipy.io
 

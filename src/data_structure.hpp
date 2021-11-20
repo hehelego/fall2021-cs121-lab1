@@ -11,17 +11,21 @@ template <typename T> struct view {
 };
 template <typename T> struct array {
   u32 n;
-  T *const data;
-  array(u32 n) : n(n), data(new T[n]) { assert(data != nullptr); }
-  array(u32 n, const T &val) : n(n), data(new T[n]) {
-    assert(data != nullptr);
-    set_all(val);
-  }
+  T *data;
+  ~array() { delete[] data; }
+  array(u32 n=0) : n(n), data(new T[n]) {}
+  array(u32 n, const T &val) : n(n), data(new T[n]) { set_all(val); }
   array(const array &a) : n(a.n), data(new T[n]) {
-    assert(data != nullptr);
     for (u32 i = 0; i < n; i++) data[i] = a[i];
   }
-  ~array() { delete[] data; }
+  inline void init(u32 m) {
+    delete[] data;
+    data = new T[n = m];
+  }
+  inline void init(u32 m, const T &val) {
+    init(m);
+    set_all(val);
+  }
 
   inline u32 size() const { return n; }
   inline T &operator[](u32 i) { return data[i]; }
@@ -30,22 +34,53 @@ template <typename T> struct array {
     for (u32 i = 0; i < n; i++) data[i] = val;
   }
 
-  view<T> slice(u32 start, u32 len) const {
+  inline view<T> slice(u32 start, u32 len) const {
     assert(start + len <= n);
     return view<T>(data, start, len);
   }
 };
-
-template <typename T> struct queue {
-  u32 l, r;
-  array<T> data;
-  queue(u32 n) : l(0), r(0), data(n) {}
-  inline u32 size() const { return r - l; }
-
-  inline void push(const T &x) { data[r++] = x; }
-  inline void pop() { l++; }
-  inline const T &get() const { return data[l]; }
-  inline void take(T &to) { to = data[l++]; }
+template <typename T> struct list {
+  struct list_node {
+    T val;
+    list_node *next;
+    list_node(const T &v) : val(v), next(nullptr) {}
+  } * h, *t;
+  struct iterator {
+    list_node *ptr;
+    void operator++() { ptr = ptr->next; }
+    inline operator bool() const { return ptr; }
+  };
+  list() : h(nullptr), t(nullptr) {}
+  ~list() {
+    while (!empty()) { pop(); }
+  }
+  inline iterator *iter() const { return iterator{h}; }
+  inline bool empty() const { return h == nullptr; }
+  inline const T &head() const { return h->val; }
+  inline void push(const T &val) {
+    if (t) {
+      t->next = new list_node{val};
+      t = t->next;
+    } else {
+      h = t = new list_node{val};
+    }
+  }
+  inline void pop() {
+    if (h) {
+      auto hh = h->next;
+      delete[] h;
+      h = hh, t = hh ? t : nullptr;
+    }
+  }
+  inline void join(list &l) {
+    if (l.empty()) { return; }
+    if (empty()) {
+      h = l.h, t = l.t;
+      l.h = l.t = nullptr;
+    } else {
+      t->next = l.h, t->l.t;
+    }
+  }
 };
 
 template <typename Word = u64> struct bitset {
