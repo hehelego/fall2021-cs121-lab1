@@ -1,6 +1,5 @@
 # exclude binary executables and object files
 bin/
-obj/
 
 # exclude the test cases
 data/*.txt.gz
@@ -10,6 +9,8 @@ data/*.mm
 # exclude PaRMAT git repository
 data/PaRMAT
 
+# exclude the reference paper directory
+reference/
 
 ###### source:
 ###### https://github.com/github/gitignore
