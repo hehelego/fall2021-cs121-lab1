@@ -1,5 +1,6 @@
 #!/usr/bin/fish
 
+rm PaRMAT/ -rf
 git clone https://github.com/farkhor/PaRMAT.git
 cd PaRMAT/Release
 make all
