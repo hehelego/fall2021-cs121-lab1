@@ -7,7 +7,6 @@ set mode    "release"                               # build mode
 set rounds  "20"                                    # run $rounds times on each testcase
 set threads "20"                                    # start $threads threads in parallel bfs
 set seed    "19260817"                              # the random number generator seed
-set source                                          # randomly selected source for BFS tree
 set output_serial   "/tmp/benchmark_serial"         # the file to store the benchmark result of serial-bfs
 set output_parallel "/tmp/benchmark_parallel"       # the file to store the benchmark result of parallel-bfs
 
