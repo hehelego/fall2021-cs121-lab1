@@ -2,10 +2,11 @@
 #include "common.hpp"
 #include <cstdio>
 void test_matrix(u32 argc, Cstr *argv) {
-  for (u32 i = 1; i < argc; i++) {
+  for (u32 i = 1; i < argc; i += 2) {
     auto matrix = adjacent_matrix::parse_matrix_market(argv[i]);
 
-    u32 source = 13;
+    u32 source = 0;
+    sscanf(argv[i + 1], "%u", &source);
     debug(std::cout) << "adj" << '[' << source << ']' << ' ' << "cnt=" << matrix.neighbours(source) << '\n';
     auto adj = matrix.adj(source);
     for (u32 i = 0; i < adj.size() && i < 10; i++) { debug(std::cout) << '\t' << adj[i] << '\n'; }

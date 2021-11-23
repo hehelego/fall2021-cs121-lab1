@@ -9,8 +9,11 @@
 #include "data_structure.hpp"
 
 struct frontier {
+private:
   array<tuple2<u32, u32>> data;
   u32 len;
+
+public:
   frontier(u32 n = 0) : data(n), len(0) {}
   inline u32 size() const { return len; }
   inline void resize(u32 l) { len = l; }
@@ -23,6 +26,7 @@ struct frontier {
 
   // prefix sum on degree array
   u32 scan_degree() {
+    if (len == 0) { return 0; }
     static array<u32> blocks{OMP_THREADS, 0};
 #pragma omp parallel
     {
@@ -43,8 +47,9 @@ struct frontier {
     }
     return (*this)(len - 1);
   }
-  // prefix sum on vertex
+  // (exculsive) prefix sum on vertex
   u32 scan_vertex(u32 V) {
+    if (len == 0) { return 0; }
     static array<u32> blocks{OMP_THREADS, 0};
 #pragma omp parallel
     {
@@ -52,8 +57,8 @@ struct frontier {
       u32 part = 0;
 #pragma omp for schedule(static)
       for (u32 i = 0; i < len; i++) {
-        part += ((*this)[i] <= V);
         (*this)(i) = part;
+        part += ((*this)[i] <= V);
       }
       blocks[id] = part;
 #pragma omp barrier
@@ -63,7 +68,8 @@ struct frontier {
 #pragma omp for schedule(static)
       for (u32 i = 0; i < len; i++) { (*this)(i) += prev_blk; }
     }
-    return (*this)(len - 1);
+    auto tmp = data[len - 1];
+    return tmp.y + (tmp.x <= V);
   }
 };
 
@@ -77,7 +83,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
   (void)E;
 
   using tup2 = tuple2<u32, u32>;
-  frontier cur_frontier{V}, next_frontier{std::max(V, 2 * E)};
+  frontier cur_frontier{V}, next_frontier{2 * E};
   bitset<> vis{V + 1};
   array<tup2> bfs_tree{V + 1, tup2{V + 1, V + 1}};
   u32 edges_in_block = 0, nodes_in_block = 0;
@@ -113,12 +119,11 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
         }
       }
     }
-
     cur_frontier.resize(next_frontier.scan_vertex(V));
 #pragma omp parallel for schedule(static)
     for (u32 i = 0; i < frontier_neighbours; i++) {
       auto v = next_frontier[i];
-      if (v <= V) { cur_frontier[next_frontier(i) - 1] = v; }
+      if (v <= V) { cur_frontier[next_frontier(i)] = v; }
     }
   }
 

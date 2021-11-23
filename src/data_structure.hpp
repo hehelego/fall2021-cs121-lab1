@@ -5,16 +5,22 @@
 #include <omp.h>
 
 template <typename T> struct view {
+private:
   T *const data;
   u32 start, len;
+
+public:
   view(T *const data, u32 start, u32 len) : data(data), start(start), len(len) {}
   inline u32 size() const { return len; }
   inline T &operator[](u32 i) { return data[start + i]; }
   inline const T &operator[](u32 i) const { return data[start + i]; }
 };
 template <typename T> struct array {
+private:
   u32 n;
   T *data;
+
+public:
   ~array() { delete[] data; }
   array(u32 n = 0) : n(n), data(new T[n]) {}
   array(u32 n, const T &val) : n(n), data(new T[n]) { set_all(val); }
@@ -42,9 +48,12 @@ template <typename T> struct array {
 };
 
 template <typename Word = u64> struct bitset {
+private:
   static const u32 S = sizeof(Word) * 8;
   const u32 n, m;
   array<std::atomic<Word>> data;
+
+public:
   bitset(u32 n) : n(n), m((n + S - 1) / S), data(m) { clear(); }
 
   inline u32 size() const { return n; }
