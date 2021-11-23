@@ -14,7 +14,7 @@ set output_parallel "/tmp/benchmark_parallel"       # the file to store the benc
 ulimit -s unlimited
 
 echo '=== build ==='
-cmake -D BUILD_TYPE=$mode -D CMAKE_BUILD_TYPE=$mode -D NUM_THREADS=$threads -D NUM_ROUNDS=$rounds -D NUM_SEED=$seed .
+cmake -D CMAKE_BUILD_TYPE=$mode -D NUM_THREADS=$threads -D NUM_ROUNDS=$rounds -D NUM_SEED=$seed .
 make
 
 

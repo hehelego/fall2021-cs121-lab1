@@ -7,21 +7,16 @@
 #include "common.hpp"
 #include "data_structure.hpp"
 
-i32 main(i32 argc, Cstr *argv) {
-  REQUIRE(argc == 3);
-  auto matrix = adjacent_matrix::parse_matrix_market(argv[1]);
-  u32 source = 0;
-  sscanf(argv[2], "%u", &source);
-  auto V = matrix.vertices(), E = matrix.edges();
-  (void)E;
-
+void once(const adjacent_matrix &matrix, u32 source, bool output) {
   // timing start
   using std::chrono::high_resolution_clock, std::chrono::duration_cast, std::chrono::duration;
   auto begin_ts = high_resolution_clock::now();
+  // timing start
 
-  // bfs
+  auto V = matrix.vertices(), E = matrix.edges();
+  (void)E;
+
   using tup2 = tuple2<u32, u32>;
-
   array<tup2> q{V};
   u32 ql = 0, qr = 0;
   array<tup2> bfs_tree{V + 1};
@@ -45,18 +40,40 @@ i32 main(i32 argc, Cstr *argv) {
   // timing end
   auto end_ts = high_resolution_clock::now();
   auto rt_dur = duration_cast<duration<double>>(end_ts - begin_ts);
-  std::cerr << "time: " << rt_dur.count() << '\t' << "MTEPS: " << (edges_in_block / 1e6 / rt_dur.count())
-            << '\n';
+  std::cerr << "source: " << source << ' ' << "time: " << rt_dur.count() << ' '
+            << "MTEPS: " << (edges_in_block / 1e6 / rt_dur.count()) << '\n';
+  // timing end
 
   // output
-  printf("%u %u\n", nodes_in_block, edges_in_block);
-  for (u32 i = 1; i <= V; i++) {
-    auto [p, d] = bfs_tree[i];
-    if (d > V) { continue; }
-    // printf("%u %u %u\n", i, d, p);
-    printf("%u %u\n", i, d);
-    // uncomment this line and compare the output with networkx-bfs output to verify correctness.
-  }
+  if (output) {
+    printf("%u %u\n", nodes_in_block, edges_in_block);
+    for (u32 i = 1; i <= V; i++) {
+      auto [p, d] = bfs_tree[i];
+      if (d > V) { continue; }
+      // printf("%u %u %u\n", i, d, p);
 
+      printf("%u %u\n", i, d);
+      // uncomment this line and compare the output with networkx-bfs output to verify correctness.
+    }
+  }
+}
+
+// usage:
+//   run ROUNDS bfs from random sources:  bin/serial-bfs graph.mm
+//   run one bfs from the source:         bin/serial-bfs graph.mm source
+i32 main(i32 argc, Cstr *argv) {
+  REQUIRE(argc == 2 || argc == 3);
+
+  srand(RNG_SEED);
+
+  auto matrix = adjacent_matrix::parse_matrix_market(argv[1]);
+  auto V = matrix.vertices();
+  if (argc == 2) {
+    for (u32 i = 0; i < ROUNDS; i++) { once(matrix, rand() % V + 1, false); }
+  } else {
+    u32 source = 0;
+    sscanf(argv[2], "%u", &source);
+    once(matrix, source, true);
+  }
   return 0;
 }

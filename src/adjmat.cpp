@@ -1,14 +1,17 @@
 #include "adjmat.hpp"
+#include <chrono>
 
 adjacent_matrix::adjacent_matrix(u32 vertices, u32 edges)
     : n(vertices), m(edges), row_start(n + 1, 0), row_cnt(n + 1, 0), data(m * 2, 0) {}
 
 adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
+  // IO timing begin
+  using std::chrono::high_resolution_clock, std::chrono::duration_cast, std::chrono::duration;
+  auto begin_ts = high_resolution_clock::now();
+  // IO timing begin
+
   FILE *f = fopen(file_path, "r");
   char line[512];
-
-  // header line
-  fgets(line, sizeof(line), f);
 
   // skip the comments, lines starts with '%'
   do { fgets(line, sizeof(line), f); } while (line[0] == '%');
@@ -17,9 +20,9 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   u32 n, m, l;
   sscanf(line, "%u%u%u", &n, &m, &l);
   REQUIRE(n == m);
-  debug() << "parse_matrix_market:" << '\n'
-          << '\t' << "vertices=" << n << '\n'
-          << '\t' << "edges=" << l << '\n';
+  debug() << "parse_matrix_market("
+          << "vertices=" << n << ", "
+          << "edges=" << l << ")\n";
 
   // read matrix elements
   adjacent_matrix matrix(n, l);
@@ -44,6 +47,12 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
 
   delete[] pairs;
   fclose(f);
+
+  // IO timing end
+  auto end_ts = high_resolution_clock::now();
+  auto rt_dur = duration_cast<duration<double>>(end_ts - begin_ts);
+  debug() << "IO time: " << rt_dur.count() << '\n';
+  // IO timing end
 
   return matrix;
 }
