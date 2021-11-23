@@ -9,25 +9,20 @@
 #include "data_structure.hpp"
 
 struct frontier {
-  array<tuple3<u32, u32, u32>> data;
+  array<tuple2<u32, u32>> data;
   u32 len;
   frontier(u32 n = 0) : data(n), len(0) {}
   inline u32 size() const { return len; }
   inline void resize(u32 l) { len = l; }
-  // getter and setter
-  inline tuple3<u32, u32, u32> at(u32 i) const { return data[i]; }
-  inline tuple3<u32, u32, u32> &at(u32 i) { return data[i]; }
   // get/set vertex
   inline u32 operator[](u32 i) const { return data[i].x; }
   inline u32 &operator[](u32 i) { return data[i].x; }
   // get/set vertex degree
   inline u32 operator()(u32 i) const { return data[i].y; }
   inline u32 &operator()(u32 i) { return data[i].y; }
-  // get/set vertex unvisisted neighbours
-  inline u32 operator()(u32 i, u32) const { return data[i].z; }
-  inline u32 &operator()(u32 i, u32) { return data[i].z; }
+
   // prefix sum on degree array
-  u32 scan() {
+  u32 scan_degree() {
     static array<u32> blocks{OMP_THREADS, 0};
 #pragma omp parallel
     {
@@ -48,8 +43,8 @@ struct frontier {
     }
     return (*this)(len - 1);
   }
-  // prefix sum on unvisisted neighbours array
-  u32 scan(u32) {
+  // prefix sum on vertex
+  u32 scan_vertex(u32 V) {
     static array<u32> blocks{OMP_THREADS, 0};
 #pragma omp parallel
     {
@@ -57,8 +52,8 @@ struct frontier {
       u32 part = 0;
 #pragma omp for schedule(static)
       for (u32 i = 0; i < len; i++) {
-        part += (*this)(i, 0);
-        (*this)(i, 0) = part;
+        part += ((*this)[i] <= V);
+        (*this)(i) = part;
       }
       blocks[id] = part;
 #pragma omp barrier
@@ -66,9 +61,9 @@ struct frontier {
       for (u32 i = 0; i < id; i++) { prev_blk += blocks[i]; }
 #pragma omp barrier
 #pragma omp for schedule(static)
-      for (u32 i = 0; i < len; i++) { (*this)(i, 0) += prev_blk; }
+      for (u32 i = 0; i < len; i++) { (*this)(i) += prev_blk; }
     }
-    return (*this)(len - 1, 0);
+    return (*this)(len - 1);
   }
 };
 
@@ -82,8 +77,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
   (void)E;
 
   using tup2 = tuple2<u32, u32>;
-  frontier cur_frontier{V};
-  array<u32> next_frontier{std::max(V, 2 * E)};
+  frontier cur_frontier{V}, next_frontier{std::max(V, 2 * E)};
   bitset<> vis{V + 1};
   array<tup2> bfs_tree{V + 1, tup2{V + 1, V + 1}};
   u32 edges_in_block = 0, nodes_in_block = 0;
@@ -101,31 +95,30 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
     for (u32 i = 0; i < cur_level_nodes; i++) {
       u32 u = cur_frontier[i], deg = matrix.deg(u);
       cur_frontier(i) = deg, edges_in_block += deg;
-      cur_frontier(i, 0) = 0;
     }
-    cur_frontier.scan();
+    auto frontier_neighbours = cur_frontier.scan_degree();
+    next_frontier.resize(frontier_neighbours);
 #pragma omp parallel for schedule(static)
     for (u32 i = 0; i < cur_level_nodes; i++) {
       auto u = cur_frontier[i], deg = matrix.deg(u);
       auto adj = matrix.adj(u);
-      auto endpos = cur_frontier(i);
+      auto startpos = i > 0 ? cur_frontier(i - 1) : 0;
       for (u32 j = 0; j < deg; j++) {
         auto v = adj[j];
+        next_frontier[startpos + j] = V + 1;
         // atomically test and set, eliminate race condition
         if (!vis.try_set(v)) {
-          cur_frontier(i, 0)++;
-          next_frontier[endpos - cur_frontier(i, 0)] = v;
+          next_frontier[startpos + j] = v;
           bfs_tree[v] = tup2{u, level};
         }
       }
     }
 
-    cur_frontier.resize(cur_frontier.scan(0));
+    cur_frontier.resize(next_frontier.scan_vertex(V));
 #pragma omp parallel for schedule(static)
-    for (u32 i = 0; i < cur_level_nodes; i++) {
-      auto endpos = cur_frontier(i) - 1;
-      auto rlast = i > 0 ? cur_frontier(i - 1, 0) : 0, rthis = cur_frontier(i, 0);
-      for (u32 j = rlast; j < rthis; j++) { cur_frontier[j] = next_frontier[endpos - (j - rlast)]; }
+    for (u32 i = 0; i < frontier_neighbours; i++) {
+      auto v = next_frontier[i];
+      if (v <= V) { cur_frontier[next_frontier(i) - 1] = v; }
     }
   }
 
