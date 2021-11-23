@@ -14,7 +14,7 @@ ulimit -s unlimited
 
 echo '=== build ==='
 cmake -D CMAKE_BUILD_TYPE=$mode -D NUM_THREADS=$threads -D NUM_ROUNDS=$rounds -D NUM_SEED=$seed .
-make
+make -j8
 
 
 echo '=== fetch datasets ==='

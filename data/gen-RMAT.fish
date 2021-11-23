@@ -3,7 +3,7 @@
 rm PaRMAT/ -rf
 git clone https://github.com/farkhor/PaRMAT.git
 cd PaRMAT/Release
-make all
+make -j8 all
 cd ../../
 
 set n 100000000
