@@ -3,7 +3,7 @@
 # a all-in-one script for fetch-data & build & benchmark
 
 set files                                           # matrix-market testcase files
-set mode    "release"                               # build mode
+set mode    "Release"                               # build mode
 set rounds  "20"                                    # run $rounds times on each testcase
 set threads "20"                                    # start $threads threads in parallel bfs
 set seed    "19260817"                              # the random number generator seed
