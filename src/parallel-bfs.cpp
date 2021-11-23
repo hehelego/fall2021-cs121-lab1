@@ -104,7 +104,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
     }
     auto frontier_neighbours = cur_frontier.scan_degree();
     next_frontier.resize(frontier_neighbours);
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(guided)
     for (u32 i = 0; i < cur_level_nodes; i++) {
       auto u = cur_frontier[i], deg = matrix.deg(u);
       auto adj = matrix.adj(u);

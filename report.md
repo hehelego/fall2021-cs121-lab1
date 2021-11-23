@@ -23,6 +23,17 @@ I added some `printf` debug info and found that the last line is read twice.
 Fortunately, this is a frequent asked question, I found the soulution on
 [stackoverflow: fgets repeats the last line](https://stackoverflow.com/questions/1642789/fgets-in-c-repeats-last-line).
 
+### load inblance when using static scheduling
+
+In top-down bfs algorithm, we find the next frontier concurently.
+This is done using openmp parallel for, with a static schedule scheme.
+
+I tested the program on my laptop and use AMDuProf for profiling.
+Heavily inblanced load is witnessed.
+
+After trying dynamic with default chunk size, dynamic with unit chunk size and guided scheduling,
+I founded that guided scheduling performs best.
+
 ### HW/SW Enviornment
 
 The benchmark was done on my laptop.  
