@@ -12,7 +12,7 @@ struct adjacent_matrix {
   inline u32 vertices() const { return n; }
   inline u32 edges() const { return m; }
   inline u32 neighbours(u32 x) const { return row_cnt[x]; }
-  inline view<u32> adj(u32 x) const { return data.slice(row_start[x], row_cnt[x]); }
-  inline u32 deg(u32 x) const { return adj(x).size(); }
+  inline u32 *adj(u32 x) const { return data(row_start[x]); }
+  inline u32 deg(u32 x) const { return row_cnt[x]; }
   static adjacent_matrix parse_matrix_market(Cstr file_path);
 };

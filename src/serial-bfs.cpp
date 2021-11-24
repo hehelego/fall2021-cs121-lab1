@@ -28,9 +28,10 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
   while (ql < qr) {
     auto [u, dis] = q[ql++];
     auto adj = matrix.adj(u);
-    edges_in_block += adj.size(), nodes_in_block++;
+    auto deg = matrix.deg(u);
+    edges_in_block += deg, nodes_in_block++;
     dis++;
-    for (u32 i = 0, v; i < adj.size(); i++) {
+    for (u32 i = 0, v; i < deg; i++) {
       v = adj[i];
       if (bfs_tree[v].y > V) { bfs_tree[v] = tup2{u, dis}, q[qr++] = tup2{v, dis}; }
     }
@@ -50,9 +51,9 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
     for (u32 i = 1; i <= V; i++) {
       auto [p, d] = bfs_tree[i];
       if (d > V) { continue; }
-      // printf("%u %u %u\n", i, d, p);
+      printf("%u %u %u\n", i, d, p);
 
-      printf("%u %u\n", i, d);
+      // printf("%u %u\n", i, d);
       // uncomment this line and compare the output with networkx-bfs output to verify correctness.
     }
   }

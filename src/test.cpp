@@ -9,7 +9,7 @@ void test_matrix(u32 argc, Cstr *argv) {
     sscanf(argv[i + 1], "%u", &source);
     debug(std::cout) << "adj" << '[' << source << ']' << ' ' << "cnt=" << matrix.neighbours(source) << '\n';
     auto adj = matrix.adj(source);
-    for (u32 i = 0; i < adj.size() && i < 10; i++) { debug(std::cout) << '\t' << adj[i] << '\n'; }
+    for (u32 i = 0; i < matrix.deg(source) && i < 10; i++) { debug(std::cout) << '\t' << adj[i] << '\n'; }
   }
 }
 void test_bitset() {
@@ -51,14 +51,13 @@ void test_omp_reduce() {
 i32 main(i32 argc, Cstr *argv) {
   test_env();
 
-  // test matrix
   test_matrix(argc, argv);
 
-  // test bitset
   test_bitset();
 
-  // test array
   test_array();
+
+  test_omp_reduce();
 
   return 0;
 }

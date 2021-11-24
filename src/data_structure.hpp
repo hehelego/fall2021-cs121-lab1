@@ -2,18 +2,6 @@
 #include "common.hpp"
 #include <atomic>
 #include <limits>
-
-template <typename T> struct view {
-private:
-  T *const data;
-  u32 start, len;
-
-public:
-  view(T *const data, u32 start, u32 len) : data(data), start(start), len(len) {}
-  inline u32 size() const { return len; }
-  inline T &operator[](u32 i) { return data[start + i]; }
-  inline const T &operator[](u32 i) const { return data[start + i]; }
-};
 template <typename T> struct array {
 private:
   u32 n;
@@ -38,10 +26,10 @@ public:
   inline u32 size() const { return n; }
   inline T &operator[](u32 i) { return data[i]; }
   inline const T &operator[](u32 i) const { return data[i]; }
+  inline T *operator()(u32 i) const { return data + i; }
   inline void set_all(const T &val) {
     for (u32 i = 0; i < n; i++) data[i] = val;
   }
-  inline view<T> slice(u32 start, u32 len) const { return view<T>(data, start, len); }
 };
 
 template <typename Word = u64> struct bitset {
