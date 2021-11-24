@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{xeCJK}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumerate}
+\usepackage{xifthen}
+\usepackage{xparse}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{minted}
+
+\usepackage[
+   backend=biber,
+   style=alphabetic,
+   sorting=ynt
+]{biblatex}
+\addbibresource{reference.bib}
+
+
+\topmargin=-0.05in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+\linespread{1.1}
+\renewcommand\headrulewidth{0.2pt}
+\renewcommand\footrulewidth{0.2pt}
+\setlength\parindent{0pt}
+
+
+%
+% page style
+%
+
+\newcommand{\reportSection}[1]{
+   \section{#1}
+   \rhead{section \emph{#1}}
+}
+
+\pagestyle{fancy}
+\lhead{CS121 Lab1}
+\cfoot{\thepage}
+
+
+
+%
+% metadate for title page
+%
+
+\title{
+   \textmd{\textbf{CS121@Fall2021 Lab 1\\ parallel breadth-first-search on a shared memory architecture with OpenMP}}\\
+   \vspace{2in}
+}
+\author{
+   {Cheng Peng (彭程)}
+   \and
+   {2020533068}
+}
+\date{\today}
+
+%
+% alias
+%
+
+% argmax and argmin
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%                    %
+%                    %
+%    the document    %
+%                    %
+%                    %
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%%%%% title page %%%%%
+\maketitle
+\pagebreak
+
+%%%%% TOC page %%%%%
+\tableofcontents
+\pagebreak
+
+%%%%% content page %%%%%
+\reportSection{backgrounds}
+
+0\cite{berrendorf2014level}
+0\cite{yasui2013numa}
+0\cite{zhang2006parallel}
+0\cite{beamer2012direction}
+0\cite{luo2010effective}
+0\cite{snapnets}
+0\cite{chakrabarti2004r}
+0\cite{khorasani2015parmat}
+
+\reportSection{environment setup}
+\reportSection{algorithm design}
+\reportSection{benchmark result}
+\reportSection{further optimization}
+\pagebreak
+
+%%%%% appendix page %%%%%
+\appendix
+\reportSection{How to test the program}
+\pagebreak
+
+\reportSection{A typical benchmark result}
+\pagebreak
+
+
+\printbibliography[
+	heading=bibintoc,
+	title={bibliography}
+]
+
+\end{document}
