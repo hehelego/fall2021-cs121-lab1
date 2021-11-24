@@ -2,7 +2,7 @@
 #include <chrono>
 
 adjacent_matrix::adjacent_matrix(u32 vertices, u32 edges)
-    : n(vertices), m(edges), row_start(n + 1, 0), row_cnt(n + 1, 0), data(m * 2, 0) {}
+    : n(vertices), m(edges), data(m, 0), row_ptr(n + 1, 0) {}
 
 adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   // IO timing begin
@@ -27,20 +27,19 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
   // read matrix elements
   adjacent_matrix matrix(n, l);
   std::vector<std::pair<u32, u32>> pairs(l);
+  std::vector<u32> row_pre(n + 1, 0);
   for (u32 i = 0, x, y; i < l; i++) {
     fgets(line, sizeof(line), f);
     sscanf(line, "%u%u", &x, &y);
     pairs[i] = std::make_pair(x, y);
-    matrix.row_cnt[x]++;
-    if (x != y) { matrix.row_cnt[y]++; }
+    row_pre[x]++;
   }
-  for (u32 i = 0; i < n; i++) { matrix.row_start[i + 1] = matrix.row_start[i] + matrix.row_cnt[i]; }
-  for (auto &rc : matrix.row_cnt) { rc = 0; }
+  for (u32 i = 1; i <= n; i++) { row_pre[i] += row_pre[i - 1]; }
   for (u32 i = 0; i < l; i++) {
     auto [x, y] = pairs[i];
-    matrix[matrix.row_head(x) + matrix.row_cnt[x]++] = y;
-    if (x != y) { matrix[matrix.row_head(y) + matrix.row_cnt[y]++] = x; }
+    matrix[row_pre[x - 1] + matrix.row_ptr[x]++] = y;
   }
+  for (u32 i = 0; i <= n; i++) { matrix.row_ptr[i] = row_pre[i]; }
 
   fclose(f);
 

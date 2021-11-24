@@ -71,10 +71,10 @@ find_package(OpenMP)
 add_compile_options(-fopenmp)
 add_link_options(-fopenmp)
 
-add_library(adjmat adjmat.cpp)
-add_library(ds data_structure.cpp)
+add_library(adj adjmat.cpp)
+add_library(bs bitset.cpp)
 add_library(com common.cpp)
-link_libraries(adjmat ds com)
+link_libraries(adj bs com)
 
 
 ### SECTION executables ###

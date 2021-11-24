@@ -1,5 +1,6 @@
 #include "adjmat.hpp"
 #include "common.hpp"
+#include "bitset.hpp"
 #include <cstdio>
 void test_matrix(u32 argc, Cstr *argv) {
   for (u32 i = 1; i < argc; i += 2) {

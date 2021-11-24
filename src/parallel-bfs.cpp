@@ -5,8 +5,8 @@
 #include <omp.h>
 
 #include "adjmat.hpp"
+#include "bitset.hpp"
 #include "common.hpp"
-#include "data_structure.hpp"
 
 struct frontier {
 private:
@@ -136,11 +136,8 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
     printf("%u %u\n", nodes_in_block, edges_in_block);
     for (u32 i = 1; i <= V; i++) {
       auto [p, d] = bfs_tree[i];
-      if (p != 0) { continue; }
+      if (p == 0) { continue; }
       printf("%u %u %u\n", i, d, p);
-
-      // printf("%u %u\n", i, d);
-      // uncomment this line and compare the output with networkx-bfs output to verify correctness.
     }
   }
 }
