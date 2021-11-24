@@ -24,6 +24,7 @@ add_compile_options(
 	-Wall
 	-Wextra
 	-lprofiler
+	-fomit-frame-pointer
 )
 add_link_options(
 	-lprofiler
