@@ -10,19 +10,19 @@
 
 struct frontier {
 private:
-  array<tuple2<u32, u32>> data;
+  array<u32> vert, degr;
   u32 len;
 
 public:
-  frontier(u32 n = 0) : data(n), len(0) {}
+  frontier(u32 n = 0) : vert(n), degr(n), len(0) {}
   inline u32 size() const { return len; }
   inline void resize(u32 l) { len = l; }
   // get/set vertex
-  inline u32 operator[](u32 i) const { return data[i].x; }
-  inline u32 &operator[](u32 i) { return data[i].x; }
+  inline u32 operator[](u32 i) const { return vert[i]; }
+  inline u32 &operator[](u32 i) { return vert[i]; }
   // get/set vertex degree
-  inline u32 operator()(u32 i) const { return data[i].y; }
-  inline u32 &operator()(u32 i) { return data[i].y; }
+  inline u32 operator()(u32 i) const { return degr[i]; }
+  inline u32 &operator()(u32 i) { return degr[i]; }
 
   // prefix sum on degree array
   u32 scan_degree() {
@@ -32,7 +32,7 @@ public:
     {
       u32 id = omp_get_thread_num();
       u32 part = 0;
-#pragma omp for schedule(static)
+#pragma omp for schedule(static) nowait
       for (u32 i = 0; i < len; i++) {
         part += (*this)(i);
         (*this)(i) = part;
@@ -41,7 +41,6 @@ public:
 #pragma omp barrier
       u32 prev_blk = 0;
       for (u32 i = 0; i < id; i++) { prev_blk += blocks[i]; }
-#pragma omp barrier
 #pragma omp for schedule(static)
       for (u32 i = 0; i < len; i++) { (*this)(i) += prev_blk; }
     }
@@ -55,7 +54,7 @@ public:
     {
       u32 id = omp_get_thread_num();
       u32 part = 0;
-#pragma omp for schedule(static)
+#pragma omp for schedule(static) nowait
       for (u32 i = 0; i < len; i++) {
         (*this)(i) = part;
         part += ((*this)[i] <= V);
@@ -64,12 +63,10 @@ public:
 #pragma omp barrier
       u32 prev_blk = 0;
       for (u32 i = 0; i < id; i++) { prev_blk += blocks[i]; }
-#pragma omp barrier
 #pragma omp for schedule(static)
       for (u32 i = 0; i < len; i++) { (*this)(i) += prev_blk; }
     }
-    auto tmp = data[len - 1];
-    return tmp.y + (tmp.x <= V);
+    return ((*this)[len - 1] <= V) + (*this)(len - 1);
   }
 };
 
@@ -85,7 +82,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
   using tup2 = tuple2<u32, u32>;
   frontier cur_frontier{V}, next_frontier{2 * E};
   bitset<> vis{V + 1};
-  array<tup2> bfs_tree{V + 1, tup2{V + 1, V + 1}};
+  array<tup2> bfs_tree{V + 1, tup2{0, 0}};
   u32 edges_in_block = 0, nodes_in_block = 0;
 
   u32 level = 0;
@@ -141,7 +138,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
     printf("%u %u\n", nodes_in_block, edges_in_block);
     for (u32 i = 1; i <= V; i++) {
       auto [p, d] = bfs_tree[i];
-      if (d > V) { continue; }
+      if (p != 0) { continue; }
       printf("%u %u %u\n", i, d, p);
 
       // printf("%u %u\n", i, d);

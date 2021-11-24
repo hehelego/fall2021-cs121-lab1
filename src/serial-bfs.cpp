@@ -17,23 +17,22 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
   (void)E;
 
   using tup2 = tuple2<u32, u32>;
-  array<tup2> q{V};
+  array<u32> q{V};
   u32 ql = 0, qr = 0;
   array<tup2> bfs_tree{V + 1};
   u32 edges_in_block = 0, nodes_in_block = 0;
 
-  bfs_tree.set_all(tup2{V + 1, V + 1});
-  bfs_tree[source] = tup2{source, 0}, q[qr++] = tup2{source, 0};
+  bfs_tree.set_all(tup2{0, 0});
+  bfs_tree[source] = tup2{source, 0}, q[qr++] = source;
 
   while (ql < qr) {
-    auto [u, dis] = q[ql++];
+    auto u = q[ql++], dis = bfs_tree[u].y + 1;
     auto adj = matrix.adj(u);
     auto deg = matrix.deg(u);
     edges_in_block += deg, nodes_in_block++;
-    dis++;
     for (u32 i = 0, v; i < deg; i++) {
       v = adj[i];
-      if (bfs_tree[v].y > V) { bfs_tree[v] = tup2{u, dis}, q[qr++] = tup2{v, dis}; }
+      if (bfs_tree[v].x == 0) { bfs_tree[v] = tup2{u, dis}, q[qr++] = v; }
     }
   }
   edges_in_block /= 2;
@@ -50,7 +49,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
     printf("%u %u\n", nodes_in_block, edges_in_block);
     for (u32 i = 1; i <= V; i++) {
       auto [p, d] = bfs_tree[i];
-      if (d > V) { continue; }
+      if (p != 0) { continue; }
       printf("%u %u %u\n", i, d, p);
 
       // printf("%u %u\n", i, d);

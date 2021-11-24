@@ -42,11 +42,6 @@ template <typename U, typename V> struct tuple2 {
   U x;
   V y;
 };
-template <typename U, typename V, typename W> struct tuple3 {
-  U x;
-  V y;
-  W z;
-};
 
 // debug log
 struct debug {

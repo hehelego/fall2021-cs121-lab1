@@ -31,8 +31,15 @@ add_link_options(-fopenmp)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 	add_compile_definitions(DEBUG)
-	add_compile_options(-g)
-	add_link_options(-g)
+	add_compile_options(
+		-O0
+		-g
+		-pg
+	)
+	add_link_options(
+		-g
+		-pg
+	)
 	if(${SANITIZE})
 		message("[log] sanitizer enabled")
 		add_compile_options(
