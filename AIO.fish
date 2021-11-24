@@ -21,7 +21,6 @@ echo '=== fetch datasets ==='
 cd data/
 ./prepare_data.fish
 set files (ls | grep '.mm$')
-set files (ls | grep "RMAT1.txt.mm")
 cd ../
 
 
