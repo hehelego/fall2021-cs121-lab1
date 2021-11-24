@@ -14,7 +14,7 @@ download https://snap.stanford.edu/data/web-Stanford.txt.gz
 # decompress
 set files (ls | grep '.gz$')
 for f in $files
-	gzip --keep --decompress $f
+	gzip --keep --decompress --force $f
 end
 
 # generate RMAT graphs
