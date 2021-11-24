@@ -102,10 +102,10 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
     next_frontier.resize(frontier_neighbours);
 #pragma omp parallel for schedule(guided)
     for (u32 i = 0; i < cur_level_nodes; i++) {
-      auto u = cur_frontier[i], deg = matrix.deg(u);
+      auto u = cur_frontier[i], head = matrix.row_head(u), deg = matrix.deg(u);
       auto startpos = i > 0 ? cur_frontier(i - 1) : 0;
       for (u32 j = 0; j < deg; j++) {
-        auto v = matrix(u, j);
+        auto v = matrix[head + j];
         next_frontier[startpos + j] = V + 1;
         // atomically test and set, eliminate race condition
         if (!vis.try_set(v)) {

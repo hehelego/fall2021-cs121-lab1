@@ -38,11 +38,9 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 	add_compile_options(
 		-O0
 		-g
-		# -pg
 	)
 	add_link_options(
 		-g
-		# -pg
 	)
 	if(${SANITIZE})
 		message("[log] sanitizer enabled")

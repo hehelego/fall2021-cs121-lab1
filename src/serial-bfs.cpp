@@ -25,10 +25,10 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
 
   while (ql < qr) {
     auto u = q[ql++], dis = bfs_tree[u].second + 1;
-    auto deg = matrix.deg(u);
+    auto head = matrix.row_head(u), deg = matrix.deg(u);
     edges_in_block += deg, nodes_in_block++;
     for (u32 i = 0, v; i < deg; i++) {
-      v = matrix(u, i);
+      v = matrix[head + i];
       if (bfs_tree[v].first == 0) { bfs_tree[v] = std::make_pair(u, dis), q[qr++] = v; }
     }
   }

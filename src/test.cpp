@@ -8,8 +8,9 @@ void test_matrix(u32 argc, Cstr *argv) {
     u32 source = 0;
     sscanf(argv[i + 1], "%u", &source);
     debug(std::cout) << "adj" << '[' << source << ']' << ' ' << "cnt=" << matrix.deg(source) << '\n';
+    auto head = matrix.row_head(source);
     for (u32 i = 0; i < matrix.deg(source) && i < 10; i++) {
-      debug(std::cout) << '\t' << matrix(source, i) << '\n';
+      debug(std::cout) << '\t' << matrix[head + i] << '\n';
     }
   }
 }
