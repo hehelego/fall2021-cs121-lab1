@@ -2,7 +2,6 @@
 #include "common.hpp"
 #include <atomic>
 #include <limits>
-#include <omp.h>
 
 template <typename T> struct view {
 private:
@@ -25,7 +24,6 @@ public:
   array(u32 n = 0) : n(n), data(new T[n]) {}
   array(u32 n, const T &val) : n(n), data(new T[n]) { set_all(val); }
   array(const array &a) : n(a.n), data(new T[n]) {
-#pragma omp parallel for
     for (u32 i = 0; i < n; i++) data[i] = a[i];
   }
   inline void init(u32 m) {
@@ -41,7 +39,6 @@ public:
   inline T &operator[](u32 i) { return data[i]; }
   inline const T &operator[](u32 i) const { return data[i]; }
   inline void set_all(const T &val) {
-#pragma omp parallel for
     for (u32 i = 0; i < n; i++) data[i] = val;
   }
   inline view<T> slice(u32 start, u32 len) const { return view<T>(data, start, len); }
@@ -61,11 +58,9 @@ public:
   inline void set(u32 i) { data[i / S] |= (Word{1} << (i % S)); }
   inline bool try_set(u32 i) { return (data[i / S].fetch_or(Word{1} << (i % S)) >> (i % S)) & 1; }
   inline void clear() {
-#pragma omp parallel for
     for (u32 i = 0; i < m; i++) { data[i] = Word{0}; }
   }
   inline void combine(const bitset &rhs) {
-#pragma omp parallel for
     for (u32 i = 0; i < m; i++) { data[i] |= rhs[i]; }
   }
 };
