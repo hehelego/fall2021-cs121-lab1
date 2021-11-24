@@ -7,9 +7,10 @@ void test_matrix(u32 argc, Cstr *argv) {
 
     u32 source = 0;
     sscanf(argv[i + 1], "%u", &source);
-    debug(std::cout) << "adj" << '[' << source << ']' << ' ' << "cnt=" << matrix.neighbours(source) << '\n';
-    auto adj = matrix.adj(source);
-    for (u32 i = 0; i < matrix.deg(source) && i < 10; i++) { debug(std::cout) << '\t' << adj[i] << '\n'; }
+    debug(std::cout) << "adj" << '[' << source << ']' << ' ' << "cnt=" << matrix.deg(source) << '\n';
+    for (u32 i = 0; i < matrix.deg(source) && i < 10; i++) {
+      debug(std::cout) << '\t' << matrix(source, i) << '\n';
+    }
   }
 }
 void test_bitset() {
@@ -24,14 +25,6 @@ void test_bitset() {
       REQUIRE(set.test(i) == false);
     }
   }
-}
-void test_array() {
-  u32 V = 1971281;
-  array<u32> q{V};
-  using tup2 = tuple2<u32, u32>;
-  tuple2<array<tup2>, u32> sub[OMP_THREADS];
-  for (u32 i = 0; i < OMP_THREADS; i++) sub[i].x.init(V), sub[i].y = 0;
-  array<tup2> bfs_tree{V + 1};
 }
 
 void test_env() {
@@ -54,8 +47,6 @@ i32 main(i32 argc, Cstr *argv) {
   test_matrix(argc, argv);
 
   test_bitset();
-
-  test_array();
 
   test_omp_reduce();
 

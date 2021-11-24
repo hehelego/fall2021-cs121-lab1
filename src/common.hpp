@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
+#include <array>
+#include <utility>
 
 // the rust-style type alias: arithemetic types
 using i8 = std::int8_t;
@@ -36,12 +39,6 @@ const u32 RNG_SEED=NUM_SEED;
 #else
 const u32 RNG_SEED=19260817;
 #endif
-
-// frequently used 2-tuple and 3-tuple
-template <typename U, typename V> struct tuple2 {
-  U x;
-  V y;
-};
 
 // debug log
 struct debug {

@@ -16,23 +16,20 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
   auto V = matrix.vertices(), E = matrix.edges();
   (void)E;
 
-  using tup2 = tuple2<u32, u32>;
-  array<u32> q{V};
+  std::vector<u32> q(V);
   u32 ql = 0, qr = 0;
-  array<tup2> bfs_tree{V + 1};
+  std::vector<std::pair<u32, u32>> bfs_tree(V + 1, std::make_pair(0, 0));
   u32 edges_in_block = 0, nodes_in_block = 0;
 
-  bfs_tree.set_all(tup2{0, 0});
-  bfs_tree[source] = tup2{source, 0}, q[qr++] = source;
+  bfs_tree[source] = std::make_pair(source, 0), q[qr++] = source;
 
   while (ql < qr) {
-    auto u = q[ql++], dis = bfs_tree[u].y + 1;
-    auto adj = matrix.adj(u);
+    auto u = q[ql++], dis = bfs_tree[u].second + 1;
     auto deg = matrix.deg(u);
     edges_in_block += deg, nodes_in_block++;
     for (u32 i = 0, v; i < deg; i++) {
-      v = adj[i];
-      if (bfs_tree[v].x == 0) { bfs_tree[v] = tup2{u, dis}, q[qr++] = v; }
+      v = matrix(u, i);
+      if (bfs_tree[v].first == 0) { bfs_tree[v] = std::make_pair(u, dis), q[qr++] = v; }
     }
   }
   edges_in_block /= 2;

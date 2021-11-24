@@ -10,7 +10,7 @@
 
 struct frontier {
 private:
-  array<u32> vert, degr;
+  std::vector<u32> vert, degr;
   u32 len;
 
 public:
@@ -27,7 +27,7 @@ public:
   // prefix sum on degree array
   u32 scan_degree() {
     if (len == 0) { return 0; }
-    static array<u32> blocks{OMP_THREADS, 0};
+    static std::array<u32, OMP_THREADS> blocks;
 #pragma omp parallel
     {
       u32 id = omp_get_thread_num();
@@ -49,7 +49,7 @@ public:
   // (exculsive) prefix sum on vertex
   u32 scan_vertex(u32 V) {
     if (len == 0) { return 0; }
-    static array<u32> blocks{OMP_THREADS, 0};
+    static std::array<u32, OMP_THREADS> blocks;
 #pragma omp parallel
     {
       u32 id = omp_get_thread_num();
@@ -79,14 +79,13 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
   auto V = matrix.vertices(), E = matrix.edges();
   (void)E;
 
-  using tup2 = tuple2<u32, u32>;
   frontier cur_frontier{V}, next_frontier{2 * E};
   bitset<> vis{V + 1};
-  array<tup2> bfs_tree{V + 1, tup2{0, 0}};
+  std::vector<std::pair<u32, u32>> bfs_tree(V + 1, std::make_pair(0, 0));
   u32 edges_in_block = 0, nodes_in_block = 0;
 
   u32 level = 0;
-  vis.set(source), bfs_tree[source] = tup2{source, level};
+  vis.set(source), bfs_tree[source] = std::make_pair(source, level);
   cur_frontier.resize(1), cur_frontier[0] = source;
 
   while (cur_frontier.size() > 0) {
@@ -104,15 +103,14 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
 #pragma omp parallel for schedule(guided)
     for (u32 i = 0; i < cur_level_nodes; i++) {
       auto u = cur_frontier[i], deg = matrix.deg(u);
-      auto adj = matrix.adj(u);
       auto startpos = i > 0 ? cur_frontier(i - 1) : 0;
       for (u32 j = 0; j < deg; j++) {
-        auto v = adj[j];
+        auto v = matrix(u, j);
         next_frontier[startpos + j] = V + 1;
         // atomically test and set, eliminate race condition
         if (!vis.try_set(v)) {
           next_frontier[startpos + j] = v;
-          bfs_tree[v] = tup2{u, level};
+          bfs_tree[v] = std::make_pair(u, level);
         }
       }
     }

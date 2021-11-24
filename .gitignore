@@ -9,6 +9,12 @@ data/*.mm
 # exclude PaRMAT git repository
 data/PaRMAT
 
+# exclude profiling output
+gmon.out
+perf.data
+perf.data.old
+out.prof
+
 # exclude the reference paper directory
 reference/
 # exclude the intermediate output file when generating report.pdf
