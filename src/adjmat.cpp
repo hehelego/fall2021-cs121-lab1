@@ -41,7 +41,6 @@ adjacent_matrix adjacent_matrix::parse_matrix_market(Cstr file_path) {
     matrix[matrix.row_head(x) + matrix.row_cnt[x]++] = y;
     if (x != y) { matrix[matrix.row_head(y) + matrix.row_cnt[y]++] = x; }
   }
-  for (u32 i = 1; i <= n; i++) REQUIRE(matrix.row_cnt[i] <= n);
 
   fclose(f);
 

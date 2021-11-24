@@ -5,12 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
+set(PROFILE       OFF       CACHE BOOL   "enable/disable profiling")
 set(SANITIZE      OFF       CACHE BOOL   "enable/disable sanitizer")
 set(NUM_THREADS   16        CACHE STRING "number of spawned threads")
 set(NUM_ROUNDS    20        CACHE STRING "number of bfs on one graph")
 set(NUM_SEED      19260817  CACHE STRING "seed for random number generator")
 
 message("[log] build ${CMAKE_BUILD_TYPE} mode")
+message("[log] profiling ${PROFILE}")
 message("[log] using ${NUM_THREADS} threads for OpenMP parallel bfs")
 message("[log] run ${NUM_ROUNDS} bfs on one graph")
 message("[log] the seed for RNG is ${NUM_SEED}")
@@ -23,16 +25,17 @@ add_compile_definitions(
 add_compile_options(
 	-Wall
 	-Wextra
-	-lprofiler
-	-fomit-frame-pointer
-)
-add_link_options(
-	-lprofiler
 )
 
-find_package(OpenMP)
-add_compile_options(-fopenmp)
-add_link_options(-fopenmp)
+if(${PROFILE})
+	add_compile_options(
+		-lprofiler
+		-fno-omit-frame-pointer
+	)
+	add_link_options(
+		-lprofiler
+	)
+endif()
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 	add_compile_definitions(DEBUG)
@@ -64,6 +67,9 @@ endif()
 
 ### SECTION libraries ###
 
+find_package(OpenMP)
+add_compile_options(-fopenmp)
+add_link_options(-fopenmp)
 
 add_library(adjmat adjmat.cpp)
 add_library(ds data_structure.cpp)
