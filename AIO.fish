@@ -5,7 +5,7 @@
 set files                                           # matrix-market testcase files
 set mode            "Release"                       # build mode
 set rounds          "20"                            # run $rounds times on each testcase
-set max_threads     "28"                            # start at most $max_threads threads in parallel bfs
+set max_threads     "30"                            # start at most $max_threads threads in parallel bfs
 set seed            "19260817"                      # the random number generator seed
 set output_serial   "/tmp/benchmark_serial"         # the file to store the benchmark result of serial-bfs
 set output_parallel "/tmp/benchmark_parallel"       # the file to store the benchmark result of parallel-bfs
@@ -32,7 +32,7 @@ for file in $files
   bin/serial     $testcase    >/dev/null 2>>$output_serial
 end
 
-for threads in (seq 2 2 $max_threads)
+for threads in (seq 1 1 $max_threads)
   echo '=== benchmark (parallel) ===' "$threads"
   cmake -D CMAKE_BUILD_TYPE=$mode -D NUM_THREADS=$threads -D NUM_ROUNDS=$rounds -D NUM_SEED=$seed .    >/dev/null 2>/dev/null
   make -j8    >/dev/null 2>/dev/null
