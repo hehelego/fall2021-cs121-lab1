@@ -17,7 +17,6 @@ public:
   inline void set(u32 i) { data[i / S] |= (Word{1} << (i % S)); }
   inline bool try_set(u32 i) { return (data[i / S].fetch_or(Word{1} << (i % S)) >> (i % S)) & 1; }
   inline void clear() {
-#pragma omp parallel
     for (u32 i = 0; i < m; i++) { data[i] = Word{0}; }
   }
 };
