@@ -16,7 +16,7 @@ void test_matrix(u32 argc, Cstr *argv) {
   }
 }
 void test_bitset() {
-  bitset<u8> set{65};
+  bitset_atomic<u8> set{65};
   set.set(5), set.set(16), set.set(64);
   debug() << set.try_set(0) << '\n';
   debug() << set.try_set(0) << '\n';

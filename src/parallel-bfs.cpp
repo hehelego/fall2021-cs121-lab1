@@ -79,8 +79,8 @@ void once(const adjacent_matrix &matrix, u32 source, bool ouput) {
   auto V = matrix.vertices(), E = matrix.edges();
   (void)E;
 
-  frontier cur_frontier{V}, next_frontier{2 * E};
-  bitset<> vis{V + 1};
+  frontier cur_frontier(V), next_frontier(2 * E);
+  bitset_atomic<> vis(V + 1);
   std::vector<std::pair<u32, u32>> bfs_tree(V + 1, std::make_pair(0, 0));
   u32 edges_in_block = 0, nodes_in_block = 0;
 

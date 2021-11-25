@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "adjmat.hpp"
+#include "bitset.hpp"
 #include "common.hpp"
 
 void once(const adjacent_matrix &matrix, u32 source, bool output) {
@@ -15,12 +16,14 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
   auto V = matrix.vertices(), E = matrix.edges();
   (void)E;
 
+  bitset_normal<> vis{V + 1};
   std::vector<u32> q(V);
   u32 ql = 0, qr = 0;
   std::vector<std::pair<u32, u32>> bfs_tree(V + 1, std::make_pair(0, 0));
   u32 edges_in_block = 0, nodes_in_block = 0;
 
   bfs_tree[source] = std::make_pair(source, 0), q[qr++] = source;
+  vis.set(source);
 
   while (ql < qr) {
     auto u = q[ql++], dis = bfs_tree[u].second + 1;
@@ -28,7 +31,7 @@ void once(const adjacent_matrix &matrix, u32 source, bool output) {
     edges_in_block += deg, nodes_in_block++;
     for (u32 i = 0, v; i < deg; i++) {
       v = matrix[head + i];
-      if (bfs_tree[v].first == 0) { bfs_tree[v] = std::make_pair(u, dis), q[qr++] = v; }
+      if (!vis.try_set(v)) { vis.set(v), bfs_tree[v] = std::make_pair(u, dis), q[qr++] = v; }
     }
   }
   edges_in_block /= 2;

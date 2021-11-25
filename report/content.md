@@ -17,6 +17,28 @@
 
 ### encountered problems
 
+#### huge amount of 'stalled-cycles-backend'
+
+In the serial version
+
+```cpp
+for (u32 i = 0, v; i < deg; i++) {
+  v = matrix[head + i];
+  if (bfs_tree[v].first == 0) { bfs_tree[v] = std::make_pair(u, dis), q[qr++] = v; }
+}
+```
+
+We see huge amount of stalled-cycles-backend event at the if statement.
+perf stat shows that this is the hottest point, the bottle neck of whole program.  
+
+According to [stackoverflow: what are stalled-cycles](https://stackoverflow.com/questions/22165299/what-are-stalled-cycles-frontend-and-stalled-cycles-backend-in-perf-stat-resul)
+
+```markdown
+The **cycles stalled in the back-end** are a waste because the CPU has to wait for resources (usually memory) or to finish long latency instructions (e.g. transcedentals - sqrt, reciprocals, divisions, etc.).
+```
+
+But I can't do any further optimization to reduce the wasted CPU cycles.
+
 #### edgelist to matrix market converter, the last line is duplicated
 
 I added some `printf` debug info and found that the last line is read twice.  
