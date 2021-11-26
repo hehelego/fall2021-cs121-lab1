@@ -190,6 +190,7 @@ Another possible reason is that, the memory on the node is saturated and our pro
 To verify that our program is correct and has consistent performance, we tested the program multiple times on a laptop with AMD ryzen 4800U processor and 16GB dual-channel RAM. The confusing performance drop down never appears.\\
 
 The thread-MTESP plot is in the appendix section.\\
+The best speed up we achieve is 3.539.
 
 We use the linux kernel tool \code{perf}\cite{linuxperf} to find the hotspot and bottleneck.\\
 A great amount of frontend-stalled-cycles and backend-stalled-cycles is witnessed. We are convinced that this have caused the performance drop down.\\
@@ -210,19 +211,27 @@ The bottleneck of the whole program is the atomic test-and-set operation.\\
 \reportSection{How to test the program}
 
 \begin{itemize}
-	\item To run all the testcases, use the all-in-one testing script \code{AIO.fish}.\\
+	\item To run all the testcases, use the all-in-one testing script \code{AIO.fish}.
 	\item To run the program on a graph given by a matrix-market format, use command \code{bin/serial file.mm} or \code{bin/parallel file.mm}.
 	      This will run 20 BFS from randomly selected vertices and report the performance.
 	\item Use \code{bin/serial file.mm source} and \code{bin/parallel file.mm source} to run only one BFS from the specified source.\\
 	      The source should be a integer ranging from $1$ to $|V|$.
 \end{itemize}
 
-\reportSection{A typical benchmark result}
+\pagebreak
+
+\reportSection{Typical benchmark results}
+
+\subsection{on AI cluster}
 
 See the \code{report/record} directory.\\
 We provide the performance data of the parallel algorithm when running on $1,2\ldots 30$ threads.
 
-% \includepdf[pages={1}]{myfile.pdf}
+\includepdf[pages={1,2}]{performance.pdf}
+
+\subsection{on local machine}
+
+\includepdf[pages={1,2,3}]{performance-local.pdf}
 
 \pagebreak
 
