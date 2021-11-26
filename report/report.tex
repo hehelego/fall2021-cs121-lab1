@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{pdfpages}
 \usepackage{hyperref}
 \usepackage{xeCJK}
 \usepackage{fancyhdr}
@@ -183,11 +184,12 @@ The input file are in a matrix-market exchange coordinate format, see \cite{matr
 
 \reportSection{Benchmark result}
 
-\begin{figure}
-	\caption{performance graph}
-	\label{fig:qwq}
-	% \includegraphics{}
-\end{figure}
+The performance is weird on ShanghaiTech AI cluster.\\
+There might be too many tasks running on that node (ShanghaiTech AI cluster node13), while our program receives a quite low scheduling priority.
+Another possible reason is that, the memory on the node is saturated and our program's data structure is swaped to disk.\\
+To verify that our program is correct and has consistent performance, we tested the program multiple times on a laptop with AMD ryzen 4800U processor and 16GB dual-channel RAM. The confusing performance drop down never appears.\\
+
+The thread-MTESP plot is in the appendix section.\\
 
 We use the linux kernel tool \code{perf}\cite{linuxperf} to find the hotspot and bottleneck.\\
 A great amount of frontend-stalled-cycles and backend-stalled-cycles is witnessed. We are convinced that this have caused the performance drop down.\\
@@ -219,6 +221,11 @@ The bottleneck of the whole program is the atomic test-and-set operation.\\
 
 See the \code{report/record} directory.\\
 We provide the performance data of the parallel algorithm when running on $1,2\ldots 30$ threads.
+
+% \includepdf[pages={1}]{myfile.pdf}
+
+\pagebreak
+
 
 \printbibliography[
 	heading=bibintoc,
